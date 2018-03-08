@@ -29,7 +29,13 @@ defmodule RobotTest do
   test "default Robot report " do
     subject = %ToyRobot.Robot{}
     assert capture_io(
-      fn -> ToyRobot.Robot.report(subject, "") end
+      fn -> ToyRobot.Robot.report(subject) end
     ) == "0, 0, NORTH\n"
+  end
+
+  test "trun Robot left " do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.left(subject)
+    assert new_subject.facing == "WEST"
   end
 end
