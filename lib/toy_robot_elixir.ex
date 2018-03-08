@@ -26,6 +26,8 @@ defmodule ToyRobot do
       "WEST"  => %{:x => -1, :y =>  0}
     }
 
+    @separators_regex ~r/[ |,\s*]/
+
     @turn %{
       "NORTH" => %{"LEFT" => "WEST",  "RIGHT" => "EAST"},
       "SOUTH" => %{"LEFT" => "EAST",  "RIGHT" => "WEST"},
@@ -37,13 +39,6 @@ defmodule ToyRobot do
     def left(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["LEFT"]}
     def right(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["RIGHT"]}
 
-    # def move(robot, _ \\ "")
-
-    # def move(%Robot{x: x, facing: facing} = robot, _) when x >= 0 and facing != "WEST", do: _move(robot)
-    # def move(%Robot{x: x, facing: facing} = robot, _) when x <= 4 and facing != "EAST", do: _move(robot)
-    # def move(%Robot{y: y, facing: facing} = robot, _) when y >= 0 and facing != "SOUTH", do: _move(robot)
-    # def move(%Robot{y: y, facing: facing} = robot, _) when y <= 4 and facing != "NORTH", do: _move(robot)
-
     def move(%Robot{x: x, y: y, facing: facing} = robot, _ \\ "") do
       cond do
         (y == 0 and facing == "SOUTH") or (y == 4 and facing == "NORTH") ->
@@ -53,6 +48,13 @@ defmodule ToyRobot do
         true ->
           %{robot | x: x + @move[facing][:x], y: y + @move[facing][:y] }
       end
+    end
+
+    def place(_robot, coordinates) do
+      [dx, dy, dfacing] = String.split(coordinates, @separators_regex)
+      {xi, _} = Integer.parse(dx)
+      {yi, _} = Integer.parse(dy)
+      %Robot{x: xi, y: yi, facing: dfacing}
     end
   end
 end

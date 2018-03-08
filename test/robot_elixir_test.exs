@@ -140,4 +140,20 @@ defmodule RobotTest do
     assert new_subject.y == 4
     assert new_subject.facing == "EAST"
   end
+
+  test "Robot place" do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.place(subject, "1,1,SOUTH")
+    assert new_subject.x == 1
+    assert new_subject.y == 1
+    assert new_subject.facing == "SOUTH"
+  end
+
+  test "Robot place at 4,2,WEST" do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.place(subject, "4,2,WEST")
+    assert new_subject.x == 4
+    assert new_subject.y == 2
+    assert new_subject.facing == "WEST"
+  end
 end
