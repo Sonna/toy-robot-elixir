@@ -36,17 +36,22 @@ defmodule ToyRobot do
     }
 
     def exec(robot, function_name, args \\ "") do
-      case function_name do
+      new_robot = case function_name do
         "PLACE" -> place(robot, args)
         "MOVE" -> move(robot, args)
         "LEFT" -> left(robot, args)
         "RIGHT" -> right(robot, args)
         "REPORT" -> report(robot, args)
-        # _ -> # Do nothing
+        _ -> nil # Do nothing
       end
+      new_robot || robot
     end
 
-    def report(robot, _ \\ ""), do: IO.puts "#{robot.x}, #{robot.y}, #{robot.facing}"
+    def report(robot, _ \\ "") do
+      IO.puts "#{robot.x}, #{robot.y}, #{robot.facing}"
+      robot
+    end
+
     def left(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["LEFT"]}
     def right(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["RIGHT"]}
 
@@ -66,6 +71,26 @@ defmodule ToyRobot do
       {xi, _} = Integer.parse(dx)
       {yi, _} = Integer.parse(dy)
       %Robot{x: xi, y: yi, facing: dfacing}
+    end
+  end
+
+  defmodule CLI do
+    def main(args \\ []) do
+      if length(args) > 0 do
+        # Parse file
+      else
+        process_input()
+      end
+    end
+
+    def process_input(robot \\ %ToyRobot.Robot{}, line \\ IO.gets("")) do
+      [input| [args| _]] = String.split(line, ~r/[ \n]/)
+
+      if input != "EXIT" do
+        new_robot = ToyRobot.Robot.exec(robot, input, args)
+        process_input(new_robot)
+      end
+      :ok
     end
   end
 end
