@@ -156,4 +156,43 @@ defmodule RobotTest do
     assert new_subject.y == 2
     assert new_subject.facing == "WEST"
   end
+
+  test "Robot exec PLACE at 2,3,EAST" do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.exec(subject, "PLACE", "2,3,EAST")
+    assert new_subject.x == 2
+    assert new_subject.y == 3
+    assert new_subject.facing == "EAST"
+  end
+
+  test "Robot exec LEFT" do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.exec(subject, "LEFT")
+    assert new_subject.x == 0
+    assert new_subject.y == 0
+    assert new_subject.facing == "WEST"
+  end
+
+  test "Robot exec RIGHT" do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.exec(subject, "RIGHT")
+    assert new_subject.x == 0
+    assert new_subject.y == 0
+    assert new_subject.facing == "EAST"
+  end
+
+  test "Robot exec MOVE" do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.exec(subject, "MOVE")
+    assert new_subject.x == 0
+    assert new_subject.y == 1
+    assert new_subject.facing == "NORTH"
+  end
+
+  test "Robot exec REPORT" do
+    subject = %ToyRobot.Robot{}
+    assert capture_io(
+      fn -> ToyRobot.Robot.exec(subject, "REPORT") end
+    ) == "0, 0, NORTH\n"
+  end
 end

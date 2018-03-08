@@ -35,6 +35,17 @@ defmodule ToyRobot do
       "WEST"  => %{"LEFT" => "SOUTH", "RIGHT" => "NORTH"}
     }
 
+    def exec(robot, function_name, args \\ "") do
+      case function_name do
+        "PLACE" -> place(robot, args)
+        "MOVE" -> move(robot, args)
+        "LEFT" -> left(robot, args)
+        "RIGHT" -> right(robot, args)
+        "REPORT" -> report(robot, args)
+        # _ -> # Do nothing
+      end
+    end
+
     def report(robot, _ \\ ""), do: IO.puts "#{robot.x}, #{robot.y}, #{robot.facing}"
     def left(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["LEFT"]}
     def right(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["RIGHT"]}
