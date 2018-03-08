@@ -38,4 +38,10 @@ defmodule RobotTest do
     new_subject = ToyRobot.Robot.left(subject)
     assert new_subject.facing == "WEST"
   end
+
+  test "trun Robot right " do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.right(subject)
+    assert new_subject.facing == "EAST"
+  end
 end

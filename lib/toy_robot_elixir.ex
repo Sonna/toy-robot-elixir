@@ -28,5 +28,6 @@ defmodule ToyRobot do
 
     def report(robot, _ \\ ""), do: IO.puts "#{robot.x}, #{robot.y}, #{robot.facing}"
     def left(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["LEFT"]}
+    def right(robot, _ \\ ""), do: %{robot | facing: @turn[robot.facing]["RIGHT"]}
   end
 end
