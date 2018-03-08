@@ -33,15 +33,23 @@ defmodule RobotTest do
     ) == "0, 0, NORTH\n"
   end
 
-  test "trun Robot left " do
+  test "turn Robot left " do
     subject = %ToyRobot.Robot{}
     new_subject = ToyRobot.Robot.left(subject)
     assert new_subject.facing == "WEST"
   end
 
-  test "trun Robot right " do
+  test "turn Robot right " do
     subject = %ToyRobot.Robot{}
     new_subject = ToyRobot.Robot.right(subject)
     assert new_subject.facing == "EAST"
+  end
+
+  test "move Robot to 0,1,NORTH " do
+    subject = %ToyRobot.Robot{}
+    new_subject = ToyRobot.Robot.move(subject)
+    assert new_subject.x == 0
+    assert new_subject.y == 1
+    assert new_subject.facing == "NORTH"
   end
 end
