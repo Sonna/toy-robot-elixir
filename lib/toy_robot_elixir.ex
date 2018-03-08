@@ -18,5 +18,7 @@ defmodule ToyRobot do
 
   defmodule Robot do
     defstruct x: 0, y: 0, facing: "NORTH"
+
+    def report(robot, _), do: IO.puts "#{robot.x}, #{robot.y}, #{robot.facing}"
   end
 end
