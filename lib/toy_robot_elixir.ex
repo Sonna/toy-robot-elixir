@@ -77,18 +77,24 @@ defmodule ToyRobot do
   defmodule CLI do
     def main(args \\ []) do
       if length(args) > 0 do
-        # Parse file
+        {head, _tail} = List.pop_at(args, 0)
+        {:ok, file} = File.open(head, [:read])
+        stream = IO.stream(file, :line)
+        process_input(stream.device)
       else
         process_input()
       end
     end
 
-    def process_input(robot \\ %ToyRobot.Robot{}, line \\ IO.gets("")) do
-      [input| [args| _]] = String.split(line, ~r/[ \n]/)
+    def process_input(device \\ :stdio, robot \\ %ToyRobot.Robot{}) do
+      line = IO.gets(device, "")
+      if line != :eof do
+        [input| [args| _]] = String.split(line, ~r/[ \n]/)
 
-      if input != "EXIT" do
-        new_robot = ToyRobot.Robot.exec(robot, input, args)
-        process_input(new_robot)
+        if input != "EXIT" do
+          new_robot = ToyRobot.Robot.exec(robot, input, args)
+          process_input(device, new_robot)
+        end
       end
       :ok
     end

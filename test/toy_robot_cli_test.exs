@@ -66,36 +66,50 @@ defmodule ToyRobotCLITest do
   end
 
   test "Robot CLI process_input EXIT" do
-    assert ToyRobot.CLI.process_input(%ToyRobot.Robot{}, "EXIT\n") == :ok
+    assert capture_io("EXIT\n", fn ->
+      assert ToyRobot.CLI.process_input() == :ok
+    end) == ""
   end
 
   test "Robot CLI process_input REPORT" do
-    assert capture_io("EXIT\n", fn ->
-      assert ToyRobot.CLI.process_input(%ToyRobot.Robot{}, "REPORT\n") == :ok
+    assert capture_io("REPORT\nEXIT\n", fn ->
+      assert ToyRobot.CLI.process_input() == :ok
     end) == "0, 0, NORTH\n"
   end
 
   test "Robot CLI process_input MOVE" do
-    assert capture_io("REPORT\nEXIT\n", fn ->
-     assert  ToyRobot.CLI.process_input(%ToyRobot.Robot{}, "MOVE\n") == :ok
+    assert capture_io("MOVE\nREPORT\nEXIT\n", fn ->
+     assert ToyRobot.CLI.process_input() == :ok
     end) == "0, 1, NORTH\n"
   end
 
   test "Robot CLI process_input LEFT" do
-    assert capture_io("REPORT\nEXIT\n", fn ->
-     assert  ToyRobot.CLI.process_input(%ToyRobot.Robot{}, "LEFT\n") == :ok
+    assert capture_io("LEFT\nREPORT\nEXIT\n", fn ->
+     assert ToyRobot.CLI.process_input() == :ok
     end) == "0, 0, WEST\n"
   end
 
   test "Robot CLI process_input RIGHT" do
-    assert capture_io("REPORT\nEXIT\n", fn ->
-     assert  ToyRobot.CLI.process_input(%ToyRobot.Robot{}, "RIGHT\n") == :ok
+    assert capture_io("RIGHT\nREPORT\nEXIT\n", fn ->
+     assert ToyRobot.CLI.process_input() == :ok
     end) == "0, 0, EAST\n"
   end
 
   test "Robot CLI process_input PLACE" do
-    assert capture_io("REPORT\nEXIT\n", fn ->
-     assert  ToyRobot.CLI.process_input(%ToyRobot.Robot{}, "PLACE 2,2,SOUTH\n") == :ok
+    assert capture_io("PLACE 2,2,SOUTH\nREPORT\nEXIT\n", fn ->
+     assert ToyRobot.CLI.process_input() == :ok
     end) == "2, 2, SOUTH\n"
+  end
+
+  test "Robot CLI process example_a.txt file" do
+    assert capture_io(fn ->
+      ToyRobot.CLI.main ["test/data/example_a.txt"]
+    end) == "0, 0, NORTH\n"
+  end
+
+  test "Robot CLI process example_b.txt file" do
+    assert capture_io(fn ->
+      ToyRobot.CLI.main ["test/data/example_b.txt"]
+    end) == "0, 1, NORTH\n2, 1, EAST\n"
   end
 end
