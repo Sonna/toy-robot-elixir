@@ -76,14 +76,15 @@ defmodule ToyRobot do
 
   defmodule CLI do
     def main(args \\ []) do
-      if length(args) > 0 do
+      io = if length(args) > 0 do
         {head, _tail} = List.pop_at(args, 0)
         {:ok, file} = File.open(head, [:read])
         stream = IO.stream(file, :line)
-        process_input(stream.device)
+        stream.device
       else
-        process_input()
+        :stdio
       end
+      process_input(io)
     end
 
     def process_input(device \\ :stdio, robot \\ %ToyRobot.Robot{}) do
