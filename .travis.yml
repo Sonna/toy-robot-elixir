@@ -1,0 +1,15 @@
+sudo: required
+
+language: elixir
+
+services:
+- docker
+
+before_install:
+- docker pull elixir:latest
+
+script:
+- docker run --rm -v $(pwd):/app -w /app elixir:latest bash -c "mix local.rebar --force"
+- docker run --rm -v $(pwd):/app -w /app elixir:latest bash -c "mix local.hex --force"
+- docker run --rm -v $(pwd):/app -w /app elixir:latest bash -c "mix deps.get"
+- docker run --rm -v $(pwd):/app -w /app elixir:latest bash -c "mix test"
